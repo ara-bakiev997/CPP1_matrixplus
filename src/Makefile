@@ -20,6 +20,8 @@ git:
 check:
 	cppcheck --enable=all --suppress=missingIncludeSystem --inconclusive --check-config $(SOURCE) *.h
 	cp ../materials/linters/.clang-format .clang-format
-#    clang-format -n src/$(SOURCE) *.h
+	#clang-format -style=file exp.cpp # как должно быть
+	clang-format -n s21_matrix_oop.cpp s21_matrix_oop.h
 	rm -rf .clang-format
+	#leaks -atExit -- ./test
 
