@@ -1,4 +1,4 @@
-GCC = g++ -Wall -Werror -Wextra -g
+GCC = g++ #-Wall -Werror -Wextra -g
 SOURCE = s21_*.cpp
 
 all: clean test
@@ -14,7 +14,7 @@ test:
 git:
 	make clean
 	git add Makefile s21_matrix_oop.cpp s21_matrix_oop.h
-	git commit -m "start"
+	git commit -m "constructor"
 	git push origin tysaneno
 
 check:
