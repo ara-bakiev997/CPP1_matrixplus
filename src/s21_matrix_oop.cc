@@ -41,6 +41,19 @@ s21::S21Matrix::S21Matrix(const S21Matrix &other) {
  */
 s21::S21Matrix::S21Matrix(S21Matrix &&other) {
   std::cout << "Move constructor" << std::endl;
+  int len = sizeof(double) * other._rows * other._cols + sizeof(double *) * other._rows;
+  if (other._rows == this->_rows && other._cols == this->_cols) {
+	std::memcpy(this->matrix, other.matrix, len);
+  } else {
+	delete[] this->matrix;
+	this->matrix = (double **) new double[len];
+	std::memcpy(this->matrix, other.matrix, len);
+  }
+  this->_cols = other._cols;
+  this->_rows = other._rows;
+  delete[] other.matrix;
+  other._cols = 0;
+  other._rows = 0;
 }
 
 /**
@@ -73,15 +86,14 @@ void s21::S21Matrix::init(double start) {
   }
 }
 
-int main() {
-  s21::S21Matrix mtr(4, 4);
-  mtr.init(10);
-
-  mtr.print();
-  s21::S21Matrix mtr1(mtr);
-  //  mtr1(&mtr);
-  mtr1.print();
-  // std::cout << "hello" << std::endl;
-
-  return 0;
-}
+//int main() {
+//  s21::S21Matrix mtr(4, 4);
+//  mtr.init(10);
+//  mtr.print();
+//  s21::S21Matrix mtr1(mtr);
+//  //  mtr1(&mtr);
+//  mtr1.print();
+//  // std::cout << "hello" << std::endl;
+//
+//  return 0;
+//}

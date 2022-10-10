@@ -20,7 +20,7 @@ class S21Matrix {
   S21Matrix(S21Matrix &&other);
   ~S21Matrix();
   void print();
-  void init(double  start);
+  void init(double start);
 };
 
 }// namespace s21
