@@ -6,13 +6,10 @@
 #define CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
 
 #include <iostream>
+#include <cstring>
 
 namespace s21 {
 class S21Matrix {
- private:
-  int _rows, _cols;
-  double **matrix;
-
  public:
   S21Matrix();
   S21Matrix(int rows, int cols);
@@ -21,6 +18,9 @@ class S21Matrix {
   ~S21Matrix();
   void print();
   void init(double start);
+ private:
+  int rows_, cols_;
+  double *matrix_;
 };
 
 }// namespace s21
