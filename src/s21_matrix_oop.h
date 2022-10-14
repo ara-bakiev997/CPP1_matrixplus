@@ -6,21 +6,37 @@
 #define CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
 
 #include <iostream>
-#include <cstring>
+#include <cmath>
+#define EPS 1e-7
 
 namespace s21 {
 class S21Matrix {
  public:
+  /**
+   * constructors and destructors */
   S21Matrix();
   S21Matrix(int rows, int cols);
   S21Matrix(const S21Matrix &other);
   S21Matrix(S21Matrix &&other);
   ~S21Matrix();
+  /**
+   * matrix method */
+  bool EqMatrix(const S21Matrix &other);
+  void SumMatrix(const S21Matrix& other);
+  void SubMatrix(const S21Matrix& other);
+  void MulNumber(const double num);
+  void MulMatrix(const S21Matrix& other);
+  /**
+   * overload operators */
+  S21Matrix &operator=(const S21Matrix &other);
+  /**
+   * support func */
   void print();
   void init(double start);
+
  private:
-  int rows_, cols_;
-  double *matrix_;
+  int rows_{}, cols_{};
+  double *matrix_{};
 };
 
 }// namespace s21
