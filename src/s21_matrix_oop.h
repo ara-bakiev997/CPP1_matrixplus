@@ -4,9 +4,9 @@
 
 #ifndef CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
 #define CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
-
 #include <iostream>
 #include <cmath>
+#include <cstring>
 #define EPS 1e-7
 
 namespace s21 {
@@ -29,6 +29,7 @@ class S21Matrix {
   /**
    * overload operators */
   S21Matrix &operator=(const S21Matrix &other);
+  double &operator()(int a, int b);
   /**
    * support func */
   void print();

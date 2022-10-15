@@ -96,23 +96,34 @@ void s21::S21Matrix::MulNumber(const double num) {
 }
 
 void s21::S21Matrix::MulMatrix(const S21Matrix& other) {
-  if ()
+  if (cols_ != other.rows_) {
+      throw std::out_of_range("The number of columns of the first matrix is not equal to the number of rows second matrix");
+  }
+  delete[] matrix_;
+  matrix_ = new double[rows_ * other.cols_];
+
 }
 
 /**
    * Overload operators */
 s21::S21Matrix &s21::S21Matrix::operator=(const S21Matrix &other) {
-  if (rows_ == other.rows_ && cols_ == other.cols_) {
-	std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
-  } else {
-	rows_ = other.rows_;
-	cols_ = other.cols_;
-	delete[] matrix_;
-	matrix_ = new double[rows_ * cols_];
-	std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
+  if (rows_ != other.rows_ || cols_ != other.cols_) {
+      rows_ = other.rows_;
+      cols_ = other.cols_;
+      delete[] matrix_;
+      matrix_ = new double[rows_ * cols_];
   }
+  std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
   return *this;
 }
+
+double &s21::S21Matrix::operator()(int rows, int cols) {
+    if (rows >= rows_ || cols >= cols_) {
+        throw std::out_of_range("Incorrect input, index is outside the matrix");
+    }
+    return matrix_[rows * cols_ + cols];
+}
+
 /**
  * Support functions */
 
@@ -138,14 +149,14 @@ int main() {
   s21::S21Matrix mtr(3, 3);
   mtr.init(0);
   mtr.print();
-  mtr.MulNumber(0);
+  std::cout << "value = " << mtr(1, 0) << std::endl;
 //  s21::S21Matrix mtr1(3, 3);
 //  std::cout << "_______SECOND_matrix______" << std::endl;
 //  mtr1.init(0);
 //  mtr1.print();
 //  mtr1.SumMatrix(mtr);
-  std::cout << "_______RESULT_matrix______" << std::endl;
-  mtr.print();
+//  std::cout << "_______RESULT_matrix______" << std::endl;
+//  mtr.print();
   //  std::cout << ((mtr1.EqMatrix(mtr) == true) ? "matrix equal" : "matrix isn't equal") << std::endl;
 
   return 0;
