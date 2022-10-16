@@ -4,9 +4,9 @@
 
 #ifndef CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
 #define CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
-#include <iostream>
 #include <cmath>
 #include <cstring>
+#include <iostream>
 #define EPS 1e-7
 
 namespace s21 {
@@ -22,16 +22,18 @@ class S21Matrix {
   /**
    * matrix method */
   bool EqMatrix(const S21Matrix &other);
-  void SumMatrix(const S21Matrix& other);
-  void SubMatrix(const S21Matrix& other);
+  void SumMatrix(const S21Matrix &other);
+  void SubMatrix(const S21Matrix &other);
   void MulNumber(const double num);
-  void MulMatrix(const S21Matrix& other);
+  void MulMatrix(const S21Matrix &other);
   /**
    * overload operators */
   S21Matrix &operator=(const S21Matrix &other);
-  double &operator()(int a, int b);
+  double &operator()(int a, int b) const;
   /**
    * support func */
+  void CreateMartix(int rows, int cols);
+  void RemoveMatrix();
   void print();
   void init(double start);
 
@@ -40,6 +42,6 @@ class S21Matrix {
   double *matrix_{};
 };
 
-}// namespace s21
+}  // namespace s21
 
-#endif//CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
+#endif  // CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
