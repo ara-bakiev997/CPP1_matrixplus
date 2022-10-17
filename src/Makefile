@@ -14,7 +14,7 @@ test:
 git:
 	make clean
 	git add Makefile s21_matrix_oop.cc s21_matrix_oop.h
-	git commit -m "mult matrix"
+	git commit -m "transpose"
 	git push origin tysaneno
 
 check:

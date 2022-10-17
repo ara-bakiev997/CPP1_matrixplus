@@ -117,11 +117,37 @@ void s21::S21Matrix::MulMatrix(const S21Matrix &other) {
   // delete[] matrix_;
   // matrix_ = new double[rows_ * other.cols_];
   // cols_ = other.cols_;
-  // std::memcpy(matrix_, other.matrix_, rows_ * other.cols_* sizeof(double));
+  // std::memcpy(matrix_, other.matrix_, rows_ * other.cols_ * sizeof(double));
   *this = tmp;
   // *this = std::move(tmp);
 }
+// Менять текущую матрицу?
+s21::S21Matrix s21::S21Matrix::Transpose() {
+  S21Matrix tmp(cols_, rows_);
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      tmp(j, i) = (*this)(i, j);
+    }
+  }
+  *this = tmp;
+  return *this;
+}
 
+s21::S21Matrix s21::S21Matrix::CalcComplements() {}
+
+double s21::S21Matrix::Determinant() {
+  if (rows_ != cols_) {
+    throw std::out_of_range("Invalid input, the matrix is not square");
+  }
+  double quotient = 0, sign = 1, result = 0;
+  if (rows_ == 1) {
+    result = (*this)(0, 0);
+  } else if (rows_ == 2) {
+    result = (*this)(0, 0) * (*this)(1, 1) - (*this)(0, 1) * (*this)(1, 0);
+  } else {
+    // new matrix and next calculation
+  }
+}
 /**
  * Overload operators */
 s21::S21Matrix &s21::S21Matrix::operator=(const S21Matrix &other) {
@@ -177,14 +203,15 @@ void s21::S21Matrix::init(double start) {
 
 int main() {
   std::cout << "_______FIRST_matrix_______" << std::endl;
-  s21::S21Matrix mtr(4, 3);
+  s21::S21Matrix mtr(5, 3);
   mtr.init(0);
   mtr.print();
-  std::cout << "_______SECOND_matrix______" << std::endl;
-  s21::S21Matrix mtr1(3, 4);
-  mtr1.init(1);
-  mtr1.print();
-  mtr.MulMatrix(mtr1);
+  mtr.Transpose();
+  // std::cout << "_______SECOND_matrix______" << std::endl;
+  // s21::S21Matrix mtr1(3, 4);
+  // mtr1.init(1);
+  // mtr1.print();
+  // mtr.MulMatrix(mtr1);
   std::cout << "_______RESULT_matrix______" << std::endl;
   mtr.print();
 
