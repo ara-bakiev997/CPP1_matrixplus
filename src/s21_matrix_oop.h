@@ -29,6 +29,7 @@ class S21Matrix {
   S21Matrix Transpose();
   S21Matrix CalcComplements();
   double Determinant();
+  S21Matrix InverseMatrix();
   /**
    * overload operators */
   S21Matrix &operator=(const S21Matrix &other);
@@ -49,6 +50,6 @@ class S21Matrix {
   void GetMiniMatr(int x, int y, S21Matrix *result);
 };
 
-}// namespace s21
+}  // namespace s21
 
-#endif// CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
+#endif  // CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
