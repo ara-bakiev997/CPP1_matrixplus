@@ -208,6 +208,16 @@ s21::S21Matrix s21::S21Matrix::InverseMatrix() {
 
 /**
  * Overload operators */
+s21::S21Matrix &s21::S21Matrix::operator+(const S21Matrix &other) {
+  if (rows_ != other.rows_ || cols_ != other.cols_) {
+    throw std::out_of_range(
+        "Incorrect input, matrices should have the same size");
+  }
+  S21Matrix temp(*this);
+  temp.SumMatrix(other);
+  return temp;
+}
+
 s21::S21Matrix &s21::S21Matrix::operator=(const S21Matrix &other) {
   if (rows_ != other.rows_ || cols_ != other.cols_) {
     rows_ = other.rows_;
@@ -304,17 +314,14 @@ int main() {
   s21::S21Matrix mtr(4, 4);
   mtr.init(5);
   mtr.print();
-  //  double result = mtr.Determinant();
-  //  std::cout << "Determinant = " << result << std::endl;
 
-  //   std::cout << "_______SECOND_matrix______" << std::endl;
-  s21::S21Matrix mtr1;
-  mtr1 = mtr.InverseMatrix();
-  //  mtr1.init(1);
-  //    mtr1.print();
-  //  mtr.MulMatrix(mtr1);
-  std::cout << "_______RESULT_matrix______" << std::endl;
+  std::cout << "_______SECOND_matrix______" << std::endl;
+  s21::S21Matrix mtr1(4, 4);
+  mtr1.init(5);
   mtr1.print();
+  std::cout << "_______RESULT_matrix______" << std::endl;
+  s21::S21Matrix mtr2(mtr + mtr1);
+  mtr2.print();
 
   //  std::cout << ((mtr1.EqMatrix(mtr) == true) ? "matrix equal" : "matrix
   //  isn't equal") << std::endl;

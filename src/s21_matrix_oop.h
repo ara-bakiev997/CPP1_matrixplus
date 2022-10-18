@@ -32,7 +32,15 @@ class S21Matrix {
   S21Matrix InverseMatrix();
   /**
    * overload operators */
+  S21Matrix &operator+(const S21Matrix &other);
+  S21Matrix &operator-(const S21Matrix &other);
+  S21Matrix &operator*(const S21Matrix &other);
+  S21Matrix &operator*(const double &other);
+  S21Matrix &operator==(const double &other);
   S21Matrix &operator=(const S21Matrix &other);
+  S21Matrix &operator+=(const double &other);
+  S21Matrix &operator-=(const double &other);
+  S21Matrix &operator*=(const double &other);
   double &operator()(int a, int b) const;
   /**
    * support func */

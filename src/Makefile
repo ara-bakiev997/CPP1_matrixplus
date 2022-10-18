@@ -14,7 +14,7 @@ test:
 git:
 	make clean
 	git add Makefile s21_matrix_oop.cc s21_matrix_oop.h
-	git commit -m "InverseMatrix"
+	git commit -m "operator + "
 	git push origin tysaneno
 
 check:
