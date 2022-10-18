@@ -2,8 +2,8 @@
 // Created by Tysane Norine on 10/10/22.
 //
 
-#ifndef CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
-#define CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
+#ifndef SRC_S21_MATRIX_OOP_H_
+#define SRC_S21_MATRIX_OOP_H_
 #include <cmath>
 #include <cstring>
 #include <iostream>
@@ -13,12 +13,13 @@ namespace s21 {
 class S21Matrix {
  public:
   /**
-   * constructors and destructors */
+   * constructors, destructor s*/
   S21Matrix();
   S21Matrix(int rows, int cols);
   S21Matrix(const S21Matrix &other);
   S21Matrix(S21Matrix &&other);
   ~S21Matrix();
+
   /**
    * matrix method */
   bool EqMatrix(const S21Matrix &other);
@@ -31,17 +32,25 @@ class S21Matrix {
   double Determinant();
   S21Matrix InverseMatrix();
   /**
+   * accessor and mutator */
+  int GetRows() const;
+  int GetCols() const;
+  void SetRows(int rows);
+  void SetCols(int cols);
+  /**
    * overload operators */
-  S21Matrix &operator+(const S21Matrix &other);
-  S21Matrix &operator-(const S21Matrix &other);
-  S21Matrix &operator*(const S21Matrix &other);
-  S21Matrix &operator*(const double &other);
-  S21Matrix &operator==(const double &other);
+  S21Matrix operator+(const S21Matrix &other);
+  S21Matrix operator-(const S21Matrix &other);
+  S21Matrix operator*(const S21Matrix &other);
+  S21Matrix operator*(const double &num);
+  bool operator==(const S21Matrix &other);
   S21Matrix &operator=(const S21Matrix &other);
-  S21Matrix &operator+=(const double &other);
-  S21Matrix &operator-=(const double &other);
+  S21Matrix &operator+=(const S21Matrix &other);
+  S21Matrix &operator-=(const S21Matrix &other);
+  S21Matrix &operator*=(const S21Matrix &other);
   S21Matrix &operator*=(const double &other);
   double &operator()(int a, int b) const;
+
   /**
    * support func */
   void print();
@@ -56,8 +65,9 @@ class S21Matrix {
   void RemoveMatrix();
   int SwapStr(S21Matrix *A, int x, int y, S21Matrix *result);
   void GetMiniMatr(int x, int y, S21Matrix *result);
+  S21Matrix CopyMatrix(const S21Matrix &other, int rows, int cols);
 };
 
 }  // namespace s21
 
-#endif  // CPP1_S21_MATRIXPLUS_0_SRC_S21_MATRIX_OOP_H_
+#endif  // SRC_S21_MATRIX_OOP_H_
