@@ -13,30 +13,30 @@ namespace s21 {
 class S21Matrix {
  public:
   /**
-   * constructors, destructor s*/
+   * Constructors and  destructor */
   S21Matrix();
   S21Matrix(int rows, int cols);
   S21Matrix(const S21Matrix &other);
-  S21Matrix(S21Matrix &&other);
+  S21Matrix(S21Matrix &&other) noexcept;
   ~S21Matrix();
 
   /**
-   * matrix method */
+   * Matrix method */
   bool EqMatrix(const S21Matrix &other);
   void SumMatrix(const S21Matrix &other);
   void SubMatrix(const S21Matrix &other);
-  void MulNumber(const double num);
+  void MulNumber(const double &num);
   void MulMatrix(const S21Matrix &other);
   S21Matrix Transpose();
   S21Matrix CalcComplements();
   double Determinant();
   S21Matrix InverseMatrix();
   /**
-   * accessor and mutator */
-  int GetRows() const;
-  int GetCols() const;
-  void SetRows(int rows);
-  void SetCols(int cols);
+   * Accessor and mutator */
+  int get_rows() const;
+  int get_cols() const;
+  void set_rows(int rows);
+  void set_cols(int cols);
   /**
    * overload operators */
   S21Matrix operator+(const S21Matrix &other);
@@ -49,6 +49,7 @@ class S21Matrix {
   S21Matrix &operator-=(const S21Matrix &other);
   S21Matrix &operator*=(const S21Matrix &other);
   S21Matrix &operator*=(const double &other);
+//  const double &operator()(int a, int b) const;
   double &operator()(int a, int b) const;
 
   /**
@@ -60,14 +61,14 @@ class S21Matrix {
   int rows_{}, cols_{};
   double *matrix_{};
   /**
-   * support func */
-  void CreateMartix();
-  void RemoveMatrix();
-  int SwapStr(S21Matrix *A, int x, int y, S21Matrix *result);
-  void GetMiniMatr(int x, int y, S21Matrix *result);
-  S21Matrix CopyMatrix(const S21Matrix &other, int rows, int cols);
+   * Support func */
+  void CreateMartix_();
+  void RemoveMatrix_();
+  int SwapStr_(S21Matrix *src, int x, int y, S21Matrix *dest);
+  void GetMiniMatr_(const int &x, const int &y, S21Matrix *result);
+  S21Matrix CopyMatrix_(S21Matrix &other, int rows, int cols);
 };
 
-}  // namespace s21
+}// namespace s21
 
-#endif  // SRC_S21_MATRIX_OOP_H_
+#endif// SRC_S21_MATRIX_OOP_H_
