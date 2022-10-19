@@ -8,7 +8,7 @@ clean:
 
 test:
 	clear
-	@$(GCC) s21_matrix_oop.cc -o test
+	@$(GCC) s21_matrix_test.cc s21_matrix_oop.cc -o test
 	@./test
 
 git:
