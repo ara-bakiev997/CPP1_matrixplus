@@ -1,27 +1,43 @@
-// #include <gtest/gtest.h>
+ #include <gtest/gtest.h>
 
 // #include "s21_matrix_oop.h"
-
+//
 // int main() {
-//   std::cout << "_______FIRST_matrix_______" << std::endl;
-//   // s21::S21Matrix mtr(3, 3);
-//   // mtr.init(5);
-//   // mtr.print();
-//   s21::S21Matrix a(2, 2);
-//   s21::S21Matrix b(2, 2);
-//   a.print();
-//   b.print();
-//   std::cout << "_______Result_______" << std::endl;
-//   a(1, 1) = 1.1;
-//   b(1, 1) = 2.2;
-//   a = b;
-//   a.print();
-//   b.print();
-
-//   //   std::cout << "_______SECOND_matrix______" << std::endl;
-
-//   // std::cout << "_______RESULT_matrix______" << std::endl;
-
+//
+//s21::S21Matrix a(2, 3);
+//s21::S21Matrix b(2, 2);
+//std::cout << (a == b ? "true" : "false") << std::endl;
+////EXPECT_EQ(a == b, false);
+//b.set_cols(3);
+//a(1, 1) = 1.1;
+//a.print();
+//std::cout << "__________________ "<< std::endl;
+//b(1, 1) = 1.1;
+//b.print();
+//std::cout << (a == b ? "true" : "false") << std::endl;
+////EXPECT_EQ(a == b, true);
+//b(1, 2) = 1.1;
+//std::cout << (a == b ? "true" : "false") << std::endl;
+////EXPECT_EQ(a == b, false);
+////   std::cout << "_______FIRST_matrix_______" << std::endl;
+////   // s21::S21Matrix mtr(3, 3);
+////   // mtr.init(5);
+////   // mtr.print();
+////   s21::S21Matrix a(2, 2);
+////   s21::S21Matrix b(2, 2);
+////   a.print();
+////   b.print();
+////   std::cout << "_______Result_______" << std::endl;
+////   a(1, 1) = 1.1;
+////   b(1, 1) = 2.2;
+////   a = b;
+////   a.print();
+////   b.print();
+//
+////   //   std::cout << "_______SECOND_matrix______" << std::endl;
+//
+////   // std::cout << "_______RESULT_matrix______" << std::endl;
+//
 //   return 0;
 // }
 
@@ -514,11 +530,6 @@ TEST(functionalFuncTest, inverseMatrixEx3) {
   EXPECT_ANY_THROW(m.InverseMatrix());
 }
 
-// TEST(functionalFuncTest, minorEx) {
-//   S21Matrix m(1, 1);
-//   EXPECT_ANY_THROW(m.MinorMatrix());
-// }
-
 TEST(functionalFuncTest, braketEx) {
   S21Matrix m(1, 1);
   EXPECT_ANY_THROW(m(5, 0) = 5);
@@ -538,3 +549,4 @@ int main(int argc, char *argv[]) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+
