@@ -1,20 +1,40 @@
-GCC = g++ -g #-Wall -Werror -Wextra
+GCC = g++ -g -Wall -Werror -Wextra
 SOURCE = s21_*.cc
+TEST = matrix_test.cc
+LIBA = s21_matrix_oop.a
+LIBO = s21_matrix_oop.o
+
+OS = $(shell uname)
+
+ifeq ($(OS), Darwin)
+	LIBFLAGS = -lm -lgtest -lstdc++
+else
+	LIBFLAGS=-lstdc++ `pkg-config --cflags --libs gtest`
+endif
 
 all: clean test
 
 clean:
-	rm -rf *.o *.a *.so *.cfg *a.out *.dSYM test *.txt
+	rm -rf *.o *.a *.so *.cfg *.out *.dSYM test *.txt
 
-test:
+test_:
 	clear
-	@$(GCC) s21_matrix_test.cc s21_matrix_oop.cc -o test
+	@$(GCC) matrix_test.cc s21_matrix_oop.cc -o test
+	@./test
+
+s21_matrix_oop.a: clean
+	$(GCC) -c $(SOURCE) -o $(LIBO)
+	ar rcs $(LIBA) $(LIBO)
+	ranlib $(LIBA)
+
+test: s21_matrix_oop.a 
+	@$(GCC) $(TEST) $(LIBA) $(LIBFLAGS)  -o test
 	@./test
 
 git:
 	make clean
-	git add Makefile s21_matrix_oop.cc s21_matrix_oop.h
-	git commit -m "operator + "
+	git add Makefile s21_matrix_oop.cc s21_matrix_oop.h matrix_test.cc
+	git commit -m "test and debug"
 	git push origin tysaneno
 
 check:

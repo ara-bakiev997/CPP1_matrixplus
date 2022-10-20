@@ -25,7 +25,7 @@ class S21Matrix {
   bool EqMatrix(const S21Matrix &other);
   void SumMatrix(const S21Matrix &other);
   void SubMatrix(const S21Matrix &other);
-  void MulNumber(const double &num);
+  void MulNumber(const double num);
   void MulMatrix(const S21Matrix &other);
   S21Matrix Transpose();
   S21Matrix CalcComplements();
@@ -49,13 +49,14 @@ class S21Matrix {
   S21Matrix &operator-=(const S21Matrix &other);
   S21Matrix &operator*=(const S21Matrix &other);
   S21Matrix &operator*=(const double &other);
-//  const double &operator()(int a, int b) const;
+  //  const double &operator()(int a, int b) const;
   double &operator()(int a, int b) const;
 
   /**
    * support func */
   void print();
   void init(double start);
+  double *get_matrix() const;
 
  private:
   int rows_{}, cols_{};
@@ -69,6 +70,6 @@ class S21Matrix {
   S21Matrix CopyMatrix_(S21Matrix &other, int rows, int cols);
 };
 
-}// namespace s21
+}  // namespace s21
 
-#endif// SRC_S21_MATRIX_OOP_H_
+#endif  // SRC_S21_MATRIX_OOP_H_
