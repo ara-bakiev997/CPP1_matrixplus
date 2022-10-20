@@ -1,4 +1,4 @@
-GCC = g++ -g -Wall -Werror -Wextra
+GCC = g++ -g #-Wall -Werror -Wextra
 SOURCE = s21_*.cc
 TEST = matrix_test.cc
 LIBA = s21_matrix_oop.a
@@ -23,7 +23,7 @@ test_:
 	@./test
 
 s21_matrix_oop.a: clean
-	$(GCC) -c $(SOURCE) -o $(LIBO)
+	$(GCC) -c $(SOURCE)
 	ar rcs $(LIBA) $(LIBO)
 	ranlib $(LIBA)
 

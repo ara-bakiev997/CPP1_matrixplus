@@ -6,17 +6,19 @@
 
 /**
  * Default constructor*/
-s21::S21Matrix::S21Matrix() : rows_(0), cols_(0), matrix_(nullptr) {}
+s21::S21Matrix::S21Matrix() : rows_(5), cols_(5) {
+  this->CreateMartix_();
+}
 /**
  * Parameterized constructor with number of rows and columns*/
 s21::S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
-  CreateMartix_();
+  this->CreateMartix_();
 }
 /**
  * Copy constructor */
 s21::S21Matrix::S21Matrix(const S21Matrix &other)
     : rows_(other.rows_), cols_(other.cols_) {
-  CreateMartix_();
+  this->CreateMartix_();
   std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
 }
 /**
@@ -37,11 +39,12 @@ bool s21::S21Matrix::EqMatrix(const S21Matrix &other) {
   bool result = true;
   if (rows_ != other.rows_ || cols_ != other.cols_) {
     result = false;
-  }
-  for (auto i = 0; i < rows_ * cols_; ++i) {
-    if (fabs(matrix_[i] - other.matrix_[i]) > EPS) {
-      result = false;
-      break;
+  } else {
+    for (auto i = 0; i < rows_ * cols_; ++i) {
+      result = fabs(matrix_[i] - other.matrix_[i]) < EPS;
+      if (!result) {
+        break;
+      }
     }
   }
   return result;
@@ -87,7 +90,7 @@ void s21::S21Matrix::MulMatrix(const S21Matrix &other) {
       }
     }
   }
-  *this = tmp;
+  *this = std::move(tmp);
 }
 
 s21::S21Matrix s21::S21Matrix::Transpose() {
@@ -221,7 +224,7 @@ s21::S21Matrix s21::S21Matrix::operator*(const double &num) {
 }
 
 bool s21::S21Matrix::operator==(const S21Matrix &other) {
-  return (*this).EqMatrix(other);
+  return this->EqMatrix(other);
 }
 
 s21::S21Matrix &s21::S21Matrix::operator=(const S21Matrix &other) {
@@ -229,7 +232,7 @@ s21::S21Matrix &s21::S21Matrix::operator=(const S21Matrix &other) {
     (*this).RemoveMatrix_();
     rows_ = other.rows_;
     cols_ = other.cols_;
-    (*this).CreateMartix_();
+    this->CreateMartix_();
   }
   std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
   return *this;
@@ -286,9 +289,10 @@ void s21::S21Matrix::CreateMartix_() {
 
 void s21::S21Matrix::RemoveMatrix_() {
   if (matrix_) {
+    delete[] matrix_;
+    matrix_ = nullptr;
     rows_ = 0;
     cols_ = 0;
-    delete[] matrix_;
   }
 }
 
@@ -338,28 +342,28 @@ s21::S21Matrix s21::S21Matrix::CopyMatrix_(S21Matrix &other, int rows,
   return other;
 }
 
-void s21::S21Matrix::print() {
-  for (auto i = 0; i < rows_; ++i) {
-    for (auto j = 0; j < cols_; ++j) {
-      std::cout << matrix_[i * cols_ + j] << ' ';
-    }
-    std::cout << std::endl;
-  }
-}
+// void s21::S21Matrix::print() {
+//   for (auto i = 0; i < rows_; ++i) {
+//     for (auto j = 0; j < cols_; ++j) {
+//       std::cout << matrix_[i * cols_ + j] << ' ';
+//     }
+//     std::cout << std::endl;
+//   }
+// }
 
-void s21::S21Matrix::init(double start) {
-  for (auto i = 0; i < rows_ * cols_; ++i) {
-    matrix_[i] = start++;
-  }
-  // matrix_[0] = 1;
-  // matrix_[1] = 2;
-  // matrix_[2] = 3;
-  matrix_[3] = 0;
-  // matrix_[4] = 4;
-  // matrix_[5] = 2;
-  // matrix_[6] = 5;
-  // matrix_[7] = 2;
-  matrix_[8] = 3;
-}
+// void s21::S21Matrix::init(double start) {
+//   for (auto i = 0; i < rows_ * cols_; ++i) {
+//     matrix_[i] = start++;
+//   }
+//   // matrix_[0] = 1;
+//   // matrix_[1] = 2;
+//   // matrix_[2] = 3;
+//   matrix_[3] = 0;
+//   // matrix_[4] = 4;
+//   // matrix_[5] = 2;
+//   // matrix_[6] = 5;
+//   // matrix_[7] = 2;
+//   matrix_[8] = 3;
+// }
 
 double *s21::S21Matrix::get_matrix() const { return this->matrix_; }
