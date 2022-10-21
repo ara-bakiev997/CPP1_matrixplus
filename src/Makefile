@@ -1,8 +1,9 @@
-GCC = g++ -g #-Wall -Werror -Wextra
+GCC =  g++ -g -Wall -Werror -Wextra
 SOURCE = s21_*.cc
 TEST = matrix_test.cc
 LIBA = s21_matrix_oop.a
 LIBO = s21_matrix_oop.o
+GCOV =--coverage
 
 OS = $(shell uname)
 
@@ -15,11 +16,10 @@ endif
 all: clean test
 
 clean:
-	rm -rf *.o *.a *.so *.cfg *.out *.dSYM test *.txt
+	rm -rf *.o *.a *.so *.cfg *.out *.dSYM test *.txt report *.info *.gcda *.gcno
 
-test_:
-	clear
-	@$(GCC) matrix_test.cc s21_matrix_oop.cc -o test
+test: s21_matrix_oop.a 
+	@$(GCC) $(TEST) $(LIBA) $(LIBFLAGS)  -o test
 	@./test
 
 s21_matrix_oop.a: clean
@@ -27,15 +27,23 @@ s21_matrix_oop.a: clean
 	ar rcs $(LIBA) $(LIBO)
 	ranlib $(LIBA)
 
-test: s21_matrix_oop.a 
-	@$(GCC) $(TEST) $(LIBA) $(LIBFLAGS)  -o test
+test_:
+	clear
+	@$(GCC) matrix_test.cc s21_matrix_oop.cc -o test
 	@./test
 
 git:
 	make clean
 	git add Makefile s21_matrix_oop.cc s21_matrix_oop.h matrix_test.cc
-	git commit -m "tests ok"
+	git commit -m "Makefile+coverage"
 	git push origin tysaneno
+
+gcov_report: s21_matrix_oop.a
+	$(GCC) $(GCOV) $(TEST) $(SOURCE) $(LIBA) -L. $(LIBA)  $(LIBFLAGS) -o test
+	./test
+	lcov -t "test" -c -d  ./ --no-external --output-file ./coverage.info
+	genhtml ./coverage.info --output-directory ./report/
+	open ./report/index.html
 
 check:
 	cppcheck --enable=all --suppress=missingIncludeSystem --inconclusive --check-config $(SOURCE) *.h
