@@ -319,111 +319,10 @@ TEST(Methods, InverseMatrixExceptDop) {
   EXPECT_ANY_THROW(mtr1.CalcComplements());
 }
 
-
-TEST(Methods, InverseMatrixExceptDop) {
-  S21Matrix mtr1(5, 4);
-  EXPECT_ANY_THROW(mtr1.CalcComplements());
-}
-
-
-
-
-
-
-TEST(functionalTest, MultMatrix2) {
-  S21Matrix a(3, 2);
-  S21Matrix b(2, 3);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2;
-  a *= b;
-  EXPECT_DOUBLE_EQ(a(1, 1), 2.2);
-}
-
-TEST(functionalTest, MultMatrixEx2) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(a *= b);
-}
-
-TEST(functionalTest, MultMatrix3) {
-  S21Matrix a(3, 2);
-  S21Matrix b(2, 3);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2;
-  a.MulMatrix(b);
-  EXPECT_DOUBLE_EQ(a(1, 1), 2.2);
-}
-
-TEST(functionalTest, MultMatrixEx3) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(a.MulMatrix(b));
-}
-
-TEST(functionalTest, MultMatrixNum) {
-  S21Matrix a(3, 2);
-  a(1, 1) = 1.1;
-  S21Matrix res = a * 2;
-  EXPECT_DOUBLE_EQ(res(1, 1), 2.2);
-}
-
-TEST(functionalTest, MultMatrixNum2) {
-  S21Matrix a(3, 2);
-  a(1, 1) = 1.1;
-  a *= 2;
-  EXPECT_DOUBLE_EQ(a(1, 1), 2.2);
-}
-
-TEST(functionalTest, MultMatrixNum3) {
-  S21Matrix a(3, 2);
-  a(1, 1) = 1.1;
-  a.MulNumber(2);
-  EXPECT_DOUBLE_EQ(a(1, 1), 2.2);
-}
-
-TEST(functionalTest, equal) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  EXPECT_EQ(a == b, false);
-  b.set_cols(3);
-  a(1, 1) = 1.1;
-  b(1, 1) = 1.1;
-  EXPECT_EQ(a == b, true);
-  b(1, 2) = 1.1;
-  EXPECT_EQ(a == b, false);
-}
-
-TEST(functionalTest, equalFunc) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  EXPECT_EQ(a.EqMatrix(b), false);
-  b.set_cols(3);
-  a(1, 1) = 1.1;
-  b(1, 1) = 1.1;
-  EXPECT_EQ(a.EqMatrix(b), true);
-  b(1, 2) = 1.1;
-  EXPECT_EQ(a.EqMatrix(b), false);
-}
-
-
-
-TEST(functionalFuncTest, braketEx) {
-  S21Matrix m(1, 1);
-  EXPECT_ANY_THROW(m(5, 0) = 5);
-}
-
-TEST(functionalFuncTest, braketEx2) {
-  S21Matrix m(3, 3);
-  m(1, 1) = 1;
-  EXPECT_EQ(m(1, 1), 1);
-  EXPECT_ANY_THROW(m(-1, -1));
-  EXPECT_ANY_THROW(m(0, -1));
-  EXPECT_ANY_THROW(m(-1, 0));
-  EXPECT_ANY_THROW(m(-1, 1));
+TEST(AccessorMutator, get_rows_cols) {
+  S21Matrix mtr(2, 3);
+  EXPECT_EQ(mtr.get_rows(), 2);
+  EXPECT_EQ(mtr.get_cols(), 3);
 }
 
 TEST(AccessorMutator, set_rows) {
@@ -454,21 +353,161 @@ TEST(AccessorMutator, set_cols) {
   EXPECT_EQ(m.get_cols(), 5);
 }
 
-TEST(assignmentOperator, brakets) {
+TEST(Operators, OperatorSum) {
+  S21Matrix mtr1(5, 5);
+  S21Matrix mtr2(5, 5);
+  mtr2(1, 1) = 1.1;
+  S21Matrix mtr3 = mtr1 + mtr2;
+  EXPECT_TRUE(mtr3.EqMatrix(mtr2));
+}
+
+TEST(Operators, OperatorSumExcept) {
+  S21Matrix mtr1(5, 5);
+  S21Matrix mtr2(6, 5);
+  EXPECT_ANY_THROW(mtr1 + mtr2);
+}
+
+TEST(Operators, OperatorSub) {
+  S21Matrix mtr1(5, 5);
+  S21Matrix mtr2(5, 5);
+  mtr1(1, 1) = 6.6;
+  mtr2(1, 1) = 1.1;
+  S21Matrix mtr3 = mtr1 - mtr2;
+  EXPECT_EQ(mtr3(1, 1), 5.5);
+}
+
+TEST(Operators, OperatorSubExcept) {
+  S21Matrix mtr1(5, 5);
+  S21Matrix mtr2(6, 5);
+  EXPECT_ANY_THROW(mtr1 - mtr2);
+}
+
+TEST(Operators, OperatorMulNum) {
+  S21Matrix mtr1(3, 3);
+  double num = 2.2;
+  mtr1(1, 1) = 2;
+  S21Matrix mtr2 = mtr1 * num;
+  EXPECT_DOUBLE_EQ(mtr2(1, 1), 4.4);
+}
+
+TEST(Operators, OperatorMulMatrix) {
+  S21Matrix mtr1(3, 2);
+  S21Matrix mtr2(2, 3);
+  S21Matrix res(3, 3);
+
+  mtr1(0, 0) = 1;
+  mtr1(1, 0) = 2;
+  mtr1(2, 0) = 3;
+  mtr1(0, 1) = 4;
+  mtr1(1, 1) = 5;
+  mtr1(2, 1) = 6;
+
+  mtr2(0, 0) = 1;
+  mtr2(0, 1) = -1;
+  mtr2(0, 2) = 1;
+  mtr2(1, 0) = 2;
+  mtr2(1, 1) = 3;
+  mtr2(1, 2) = 4;
+
+  res(0, 0) = 9;
+  res(0, 1) = 11;
+  res(0, 2) = 17;
+  res(1, 0) = 12;
+  res(1, 1) = 13;
+  res(1, 2) = 22;
+  res(2, 0) = 15;
+  res(2, 1) = 15;
+  res(2, 2) = 27;
+
+  S21Matrix mtr3 = mtr1 * mtr2;
+  EXPECT_TRUE(mtr3.EqMatrix(res));
+}
+
+TEST(Operators, OperatorEq) {
+  S21Matrix a(2, 3);
+  S21Matrix b(2, 2);
+  EXPECT_EQ(a == b, false);
+  b.set_cols(3);
+  a(1, 1) = 1.1;
+  b(1, 1) = 1.1;
+  EXPECT_EQ(a == b, true);
+  b(1, 2) = 1.1;
+  EXPECT_EQ(a == b, false);
+}
+
+TEST(Operators, OperatorAssign) {
+  S21Matrix a(2, 3);
+  S21Matrix b(2, 5);
+  a = b;
+  EXPECT_EQ(a == b, true);
+}
+
+TEST(Operators, OperatorSumAssign) {
+  S21Matrix mtr1(5, 5);
+  mtr1(1, 1) = 1.1;
+  S21Matrix mtr2;
+  mtr2 += mtr1;
+  EXPECT_TRUE(mtr1.EqMatrix(mtr2));
+}
+
+TEST(Operators, OperatorSubAssign) {
+  S21Matrix mtr1(5, 5);
+  mtr1(1, 1) = 1.1;
+  S21Matrix mtr2;
+  mtr2 -= mtr1;
+  mtr1(1, 1) = -1.1;
+  EXPECT_TRUE(mtr1.EqMatrix(mtr2));
+}
+
+TEST(Operators, OperatorMulEqMatr) {
+  S21Matrix a(3, 2);
+  S21Matrix b(2, 3);
+  a(1, 1) = 1.1;
+  b(1, 1) = 2;
+  a *= b;
+  EXPECT_DOUBLE_EQ(a(1, 1), 2.2);
+}
+
+TEST(functionalTest, OperatorMulEqExcept) {
+  S21Matrix a(2, 3);
+  S21Matrix b(2, 2);
+  a(1, 1) = 1.1;
+  b(1, 1) = 2.2;
+  EXPECT_ANY_THROW(a *= b);
+}
+
+TEST(Operators, OperatorMulEqNum) {
+  S21Matrix a(3, 2);
+  double num = 2;
+  a(1, 1) = 1.1;
+  a *= num;
+  EXPECT_DOUBLE_EQ(a(1, 1), 2.2);
+}
+
+TEST(assignmentOperator, OperatorBraket) {
   S21Matrix m(2, 3);
   m(1, 1) = 3;
   EXPECT_EQ(m(1, 1), 3);
 }
 
-TEST(assignmentOperator, braketsTrow) {
-  S21Matrix m(2, 3);
-  EXPECT_ANY_THROW(m(1, 5));
+TEST(functionalFuncTest, OperatorBraketExcept) {
+  S21Matrix m(1, 1);
+  EXPECT_ANY_THROW(m(5, 0) = 5);
 }
 
-TEST(supportFunction, SetZeroMatrix) {
-  S21Matrix m;
-  EXPECT_EQ(m.get_rows(), 5);
-  EXPECT_EQ(m.get_cols(), 5);
+TEST(functionalFuncTest, OperatorBraketExceptDop) {
+  S21Matrix m(3, 3);
+  m(1, 1) = 1;
+  EXPECT_EQ(m(1, 1), 1);
+  EXPECT_ANY_THROW(m(-1, -1));
+  EXPECT_ANY_THROW(m(0, -1));
+  EXPECT_ANY_THROW(m(-1, 0));
+  EXPECT_ANY_THROW(m(-1, 1));
+}
+
+TEST(assignmentOperator, OperatorBraketExceptDop2) {
+  S21Matrix m(2, 3);
+  EXPECT_ANY_THROW(m(1, 5));
 }
 
 int main(int argc, char *argv[]) {
