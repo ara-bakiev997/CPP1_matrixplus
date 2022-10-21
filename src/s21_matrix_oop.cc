@@ -6,19 +6,17 @@
 
 /**
  * Default constructor*/
-s21::S21Matrix::S21Matrix() : rows_(5), cols_(5) {
-  this->CreateMartix_();
-}
+s21::S21Matrix::S21Matrix() : rows_(5), cols_(5) { CreateMartix_(); }
 /**
  * Parameterized constructor with number of rows and columns*/
 s21::S21Matrix::S21Matrix(int rows, int cols) : rows_(rows), cols_(cols) {
-  this->CreateMartix_();
+  CreateMartix_();
 }
 /**
  * Copy constructor */
 s21::S21Matrix::S21Matrix(const S21Matrix &other)
     : rows_(other.rows_), cols_(other.cols_) {
-  this->CreateMartix_();
+  CreateMartix_();
   std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
 }
 /**
@@ -234,7 +232,9 @@ s21::S21Matrix &s21::S21Matrix::operator=(const S21Matrix &other) {
     cols_ = other.cols_;
     this->CreateMartix_();
   }
-  std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
+  std::copy(other.matrix_, other.matrix_ + other.rows_ * other.cols_,
+            this->matrix_);
+  // std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
   return *this;
 }
 
@@ -258,17 +258,17 @@ s21::S21Matrix &s21::S21Matrix::operator*=(const double &other) {
   return *this;
 }
 
-// const double &s21::S21Matrix::operator()(int rows, int cols) const {
-//   if (rows >= rows_ || cols >= cols_) {
-//	throw std::out_of_range("Incorrect input, index is outside the matrix");
-//   }
-//   if (rows < 0 || cols < 0) {
-//	throw std::out_of_range("Incorrect input, index less than zero");
-//   }
-//   return matrix_[rows * cols_ + cols];
-// }
+const double &s21::S21Matrix::operator()(int rows, int cols) const {
+  if (rows >= rows_ || cols >= cols_) {
+    throw std::out_of_range("Incorrect input, index is outside the matrix");
+  }
+  if (rows < 0 || cols < 0) {
+    throw std::out_of_range("Incorrect input, index less than zero");
+  }
+  return matrix_[rows * cols_ + cols];
+}
 
-double &s21::S21Matrix::operator()(int rows, int cols) const {
+double &s21::S21Matrix::operator()(int rows, int cols) {
   if (rows >= rows_ || cols >= cols_) {
     throw std::out_of_range("Incorrect input, index is outside the matrix");
   }
@@ -284,7 +284,7 @@ void s21::S21Matrix::CreateMartix_() {
   if (rows_ <= 0 || cols_ <= 0) {
     throw std::out_of_range("Incorrect input, index less than zero");
   }
-  matrix_ = new double[rows_ * cols_];
+  matrix_ = new double[rows_ * cols_]{};
 }
 
 void s21::S21Matrix::RemoveMatrix_() {
@@ -310,7 +310,7 @@ int s21::S21Matrix::SwapStr_(S21Matrix *src, int x, int y, S21Matrix *dest) {
   }
   if (!error) {
     double tmp = 0;
-    for (int j = 0; j < src->cols_; j++) {
+    for (auto j = 0; j < src->cols_; ++j) {
       tmp = (*src)(x, j);
       (*src)(x, j) = (*dest)(i, j);
       (*dest)(i, j) = tmp;

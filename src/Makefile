@@ -34,7 +34,7 @@ test: s21_matrix_oop.a
 git:
 	make clean
 	git add Makefile s21_matrix_oop.cc s21_matrix_oop.h matrix_test.cc
-	git commit -m "tests"
+	git commit -m "tests ok"
 	git push origin tysaneno
 
 check:

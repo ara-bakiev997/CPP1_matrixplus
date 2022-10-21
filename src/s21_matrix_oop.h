@@ -49,8 +49,8 @@ class S21Matrix {
   S21Matrix &operator-=(const S21Matrix &other);
   S21Matrix &operator*=(const S21Matrix &other);
   S21Matrix &operator*=(const double &other);
-  //  const double &operator()(int a, int b) const;
-  double &operator()(int a, int b) const;
+  const double &operator()(int a, int b) const;
+  double &operator()(int a, int b);
 
   /**
    * support func */
