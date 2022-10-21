@@ -1,7 +1,3 @@
-//
-// Created by Tysane Norine on 10/10/22.
-//
-
 #include "s21_matrix_oop.h"
 
 /**
@@ -116,8 +112,6 @@ s21::S21Matrix s21::S21Matrix::CalcComplements() {
         GetMiniMatr_(i, j, &temp);
         sign = pow(-1, i + j);
         result(i, j) = sign * temp.Determinant();
-        //		result(i, j) = sign * result(i, j); // скорее всего
-        //решение выше лучше
       }
     }
   }
@@ -156,9 +150,7 @@ double s21::S21Matrix::Determinant() {
         break;
       }
     }
-    if (!check)
-      result *= sign;  // проверь всегда ли верный знак получается, мб условие
-                       // не нужно
+    result *= sign;
   }
   return result;
 }
@@ -232,9 +224,7 @@ s21::S21Matrix &s21::S21Matrix::operator=(const S21Matrix &other) {
     cols_ = other.cols_;
     this->CreateMartix_();
   }
-  std::copy(other.matrix_, other.matrix_ + other.rows_ * other.cols_,
-            this->matrix_);
-  // std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
+  std::memcpy(matrix_, other.matrix_, rows_ * cols_ * sizeof(double));
   return *this;
 }
 
@@ -341,29 +331,3 @@ s21::S21Matrix s21::S21Matrix::CopyMatrix_(S21Matrix &other, int rows,
   }
   return other;
 }
-
-// void s21::S21Matrix::print() {
-//   for (auto i = 0; i < rows_; ++i) {
-//     for (auto j = 0; j < cols_; ++j) {
-//       std::cout << matrix_[i * cols_ + j] << ' ';
-//     }
-//     std::cout << std::endl;
-//   }
-// }
-
-// void s21::S21Matrix::init(double start) {
-//   for (auto i = 0; i < rows_ * cols_; ++i) {
-//     matrix_[i] = start++;
-//   }
-//   // matrix_[0] = 1;
-//   // matrix_[1] = 2;
-//   // matrix_[2] = 3;
-//   matrix_[3] = 0;
-//   // matrix_[4] = 4;
-//   // matrix_[5] = 2;
-//   // matrix_[6] = 5;
-//   // matrix_[7] = 2;
-//   matrix_[8] = 3;
-// }
-
-double *s21::S21Matrix::get_matrix() const { return this->matrix_; }

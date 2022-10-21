@@ -1,6 +1,3 @@
-//
-// Created by Tysane Norine on 10/10/22.
-//
 
 #ifndef SRC_S21_MATRIX_OOP_H_
 #define SRC_S21_MATRIX_OOP_H_
@@ -38,7 +35,7 @@ class S21Matrix {
   void set_rows(int rows);
   void set_cols(int cols);
   /**
-   * overload operators */
+   * Overload operators */
   S21Matrix operator+(const S21Matrix &other);
   S21Matrix operator-(const S21Matrix &other);
   S21Matrix operator*(const S21Matrix &other);
@@ -52,12 +49,6 @@ class S21Matrix {
   const double &operator()(int a, int b) const;
   double &operator()(int a, int b);
 
-  /**
-   * support func */
-  void print();
-  void init(double start);
-  double *get_matrix() const;
-
  private:
   int rows_{}, cols_{};
   double *matrix_{};
@@ -69,7 +60,6 @@ class S21Matrix {
   void GetMiniMatr_(const int &x, const int &y, S21Matrix *result);
   S21Matrix CopyMatrix_(S21Matrix &other, int rows, int cols);
 };
-
 }  // namespace s21
 
 #endif  // SRC_S21_MATRIX_OOP_H_

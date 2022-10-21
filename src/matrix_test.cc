@@ -1,277 +1,334 @@
 #include <gtest/gtest.h>
-
-// #include "s21_matrix_oop.h"
-//
-// int main() {
-//
-// s21::S21Matrix a(2, 3);
-// s21::S21Matrix b(2, 2);
-// std::cout << (a == b ? "true" : "false") << std::endl;
-////EXPECT_EQ(a == b, false);
-// b.set_cols(3);
-// a(1, 1) = 1.1;
-// a.print();
-// std::cout << "__________________ "<< std::endl;
-// b(1, 1) = 1.1;
-// b.print();
-// std::cout << (a == b ? "true" : "false") << std::endl;
-////EXPECT_EQ(a == b, true);
-// b(1, 2) = 1.1;
-// std::cout << (a == b ? "true" : "false") << std::endl;
-////EXPECT_EQ(a == b, false);
-////   std::cout << "_______FIRST_matrix_______" << std::endl;
-////   // s21::S21Matrix mtr(3, 3);
-////   // mtr.init(5);
-////   // mtr.print();
-////   s21::S21Matrix a(2, 2);
-////   s21::S21Matrix b(2, 2);
-////   a.print();
-////   b.print();
-////   std::cout << "_______Result_______" << std::endl;
-////   a(1, 1) = 1.1;
-////   b(1, 1) = 2.2;
-////   a = b;
-////   a.print();
-////   b.print();
-//
-////   //   std::cout << "_______SECOND_matrix______" << std::endl;
-//
-////   // std::cout << "_______RESULT_matrix______" << std::endl;
-//
-//   return 0;
-// }
-
-#include <gtest/gtest.h>
-
 #include <utility>
-
 #include "s21_matrix_oop.h"
 
 using namespace s21;
 
-TEST(Basic, defaultConstructor) {
-  S21Matrix m;
-  EXPECT_EQ(m.get_rows(), 5);
-  EXPECT_EQ(m.get_cols(), 5);
+TEST(Constructors, Default) {
+  S21Matrix mtr;
+  EXPECT_EQ(mtr.get_rows(), 5);
+  EXPECT_EQ(mtr.get_cols(), 5);
 }
 
-TEST(Basic, defaultConstructorEx) {
-  S21Matrix m;
-  EXPECT_ANY_THROW(m(6, 6));
+TEST(Constructors, DefaultExcept) {
+  S21Matrix mtr;
+  EXPECT_ANY_THROW(mtr(6, 6));
+  EXPECT_ANY_THROW(mtr(-1, -1));
 }
 
-TEST(Basic, parameterizedCconstructor) {
-  S21Matrix m(2, 3);
-  EXPECT_EQ(m.get_rows(), 2);
-  EXPECT_EQ(m.get_cols(), 3);
+TEST(Constructors, Parameterized) {
+  S21Matrix mtr(4, 3);
+  EXPECT_EQ(mtr.get_rows(), 4);
+  EXPECT_EQ(mtr.get_cols(), 3);
 }
 
-TEST(Basic, parameterizedCconstructorEx) {
-  EXPECT_ANY_THROW(S21Matrix ex(0, -2));
+TEST(Constructors, ParameterizedExcept) {
+  EXPECT_ANY_THROW(S21Matrix mtr(-3, -2));
+  EXPECT_ANY_THROW(S21Matrix mtr(1, 0));
 }
 
-TEST(Basic, parameterizedCconstructorEx2) {
-  EXPECT_ANY_THROW(S21Matrix m(0, 1););
+TEST(Constructors, Copy) {
+  S21Matrix mtr(4, 3);
+  S21Matrix cmp(mtr);
+  EXPECT_EQ(cmp.get_rows(), 4);
+  EXPECT_EQ(cmp.get_cols(), 3);
+  EXPECT_EQ(mtr.EqMatrix(cmp), true);
 }
 
-TEST(Basic, copyConstructor) {
-  S21Matrix m(2, 3);
-  S21Matrix res(m);
-  EXPECT_EQ(res.get_rows(), 2);
-  EXPECT_EQ(res.get_cols(), 3);
-  EXPECT_EQ(m == res, true);
+TEST(Constructors, Move) {
+  S21Matrix mtr(4, 5);
+  S21Matrix cmp(std::move(mtr));
+  EXPECT_EQ(cmp.get_rows(), 4);
+  EXPECT_EQ(cmp.get_cols(), 5);
+  EXPECT_EQ(mtr.get_rows(), 0);
+  EXPECT_EQ(mtr.get_cols(), 0);
 }
 
-TEST(Basic, moveConstructor) {
-  S21Matrix m(2, 3);
-  S21Matrix res(std::move(m));
-  EXPECT_EQ(res.get_rows(), 2);
-  EXPECT_EQ(res.get_cols(), 3);
-  EXPECT_EQ(m.get_rows(), 0);
-  EXPECT_EQ(m.get_cols(), 0);
-  EXPECT_EQ(m.get_matrix(), nullptr);
+TEST(Methods, EqMatrix) {
+  S21Matrix mtr(4, 5);
+  S21Matrix cmp(4, 5);
+  EXPECT_TRUE(mtr.EqMatrix(cmp));
+  cmp(0, 0) = 2.2;
+  EXPECT_FALSE(mtr.EqMatrix(cmp));
+  mtr(0, 0) = 2.2;
+  EXPECT_TRUE(mtr.EqMatrix(cmp));
+  mtr.set_cols(4);
+  EXPECT_FALSE(mtr.EqMatrix(cmp));
 }
 
-TEST(GetterAndSetter, set_rows) {
-  S21Matrix m(2, 3);
-  m(1, 1) = 4.4;
-  EXPECT_EQ(m(1, 1), 4.4);
-  EXPECT_EQ(m.get_rows(), 2);
-  EXPECT_EQ(m.get_cols(), 3);
-  m.set_rows(4);
-  m(3, 2) = 5.5;
-  EXPECT_EQ(m(1, 1), 4.4);
-  EXPECT_EQ(m(3, 2), 5.5);
-  EXPECT_EQ(m.get_rows(), 4);
-  EXPECT_EQ(m.get_cols(), 3);
+TEST(Methods, SumMatrix) {
+  S21Matrix mtr1(5, 5);
+  S21Matrix mtr2(5, 5);
+  mtr2(1, 1) = 1.1;
+  mtr1.SumMatrix(mtr2);
+  EXPECT_TRUE(mtr1.EqMatrix(mtr2));
 }
 
-TEST(GetterAndSetter, set_cols) {
-  S21Matrix m(2, 3);
-  m(1, 1) = 4.4;
-  EXPECT_EQ(m(1, 1), 4.4);
-  EXPECT_EQ(m.get_rows(), 2);
-  EXPECT_EQ(m.get_cols(), 3);
-  m.set_cols(5);
-  m(1, 4) = 5.5;
-  EXPECT_EQ(m(1, 1), 4.4);
-  EXPECT_EQ(m(1, 4), 5.5);
-  EXPECT_EQ(m.get_rows(), 2);
-  EXPECT_EQ(m.get_cols(), 5);
+TEST(Methods, SumMatrixExcept) {
+  S21Matrix mtr1(5, 4);
+  S21Matrix mtr2(4, 5);
+  EXPECT_ANY_THROW(mtr1.SumMatrix(mtr2));
 }
 
-TEST(assignmentOperator, brakets) {
-  S21Matrix m(2, 3);
-  m(1, 1) = 3;
-  EXPECT_EQ(m(1, 1), 3);
+TEST(Methods, SubMatrix) {
+  S21Matrix mtr1(5, 5);
+  S21Matrix mtr2(5, 5);
+  mtr2(1, 1) = 1.1;
+  mtr1.SubMatrix(mtr2);
+  mtr2(1, 1) = -1.1;
+  EXPECT_TRUE(mtr1.EqMatrix(mtr2));
 }
 
-TEST(assignmentOperator, braketsTrow) {
-  S21Matrix m(2, 3);
-  EXPECT_ANY_THROW(m(1, 5));
+TEST(Methods, SubMatrixExcept) {
+  S21Matrix mtr1(5, 4);
+  S21Matrix mtr2(4, 5);
+  EXPECT_ANY_THROW(mtr1.SubMatrix(mtr2));
 }
 
-TEST(supportFunction, SetZeroMatrix) {
-  S21Matrix m;
-  EXPECT_EQ(m.get_rows(), 5);
-  EXPECT_EQ(m.get_cols(), 5);
+TEST(Methods, MulNumber) {
+  S21Matrix mtr1(3, 3);
+  double num = 2.2;
+  mtr1(1, 1) = 2;
+  mtr1.MulNumber(num);
+  EXPECT_DOUBLE_EQ(mtr1(1, 1), 4.4);
 }
 
-TEST(functionalTest, copy) {
-  S21Matrix a(2, 2);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  a = b;
-  EXPECT_DOUBLE_EQ(a(1, 1), 2.2);
+TEST(Methods, MulMatrix) {
+  S21Matrix mtr1(3, 2);
+  S21Matrix mtr2(2, 3);
+  S21Matrix res(3, 3);
+
+  mtr1(0, 0) = 1;
+  mtr1(1, 0) = 2;
+  mtr1(2, 0) = 3;
+  mtr1(0, 1) = 4;
+  mtr1(1, 1) = 5;
+  mtr1(2, 1) = 6;
+
+  mtr2(0, 0) = 1;
+  mtr2(0, 1) = -1;
+  mtr2(0, 2) = 1;
+  mtr2(1, 0) = 2;
+  mtr2(1, 1) = 3;
+  mtr2(1, 2) = 4;
+
+  res(0, 0) = 9;
+  res(0, 1) = 11;
+  res(0, 2) = 17;
+  res(1, 0) = 12;
+  res(1, 1) = 13;
+  res(1, 2) = 22;
+  res(2, 0) = 15;
+  res(2, 1) = 15;
+  res(2, 2) = 27;
+
+  mtr1.MulMatrix(mtr2);
+  EXPECT_TRUE(mtr1.EqMatrix(res));
 }
 
-TEST(functionalTest, Plus) {
-  S21Matrix a(2, 2);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  S21Matrix res = a + b;
-  EXPECT_DOUBLE_EQ(res(1, 1), 3.3);
+TEST(Methods, MulMatrixExcept) {
+  S21Matrix mtr1(5, 4);
+  S21Matrix mtr2(5, 5);
+  EXPECT_ANY_THROW(mtr1.MulMatrix(mtr2));
 }
 
-TEST(functionalTest, PlusEx) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(S21Matrix res = a + b);
+TEST(Methods, Transpose) {
+  S21Matrix mtr1(3, 2);
+  S21Matrix res(2, 3);
+
+  mtr1(0, 0) = 1;
+  mtr1(1, 0) = 2;
+  mtr1(2, 0) = 3;
+  mtr1(0, 1) = 4;
+  mtr1(1, 1) = 5;
+  mtr1(2, 1) = 6;
+
+  res(0, 0) = 1;
+  res(0, 1) = 2;
+  res(0, 2) = 3;
+  res(1, 0) = 4;
+  res(1, 1) = 5;
+  res(1, 2) = 6;
+
+  S21Matrix mtr2(mtr1.Transpose());
+  EXPECT_TRUE(mtr2.EqMatrix(res));
 }
 
-TEST(functionalTest, Plus2) {
-  S21Matrix a(2, 2);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  a += b;
-  EXPECT_DOUBLE_EQ(a(1, 1), 3.3);
+TEST(Methods, Determinant) {
+  S21Matrix mtr1(4, 4);
+  mtr1(0, 0) = 9;
+  mtr1(0, 1) = 2;
+  mtr1(0, 2) = 2;
+  mtr1(0, 3) = 4;
+  mtr1(1, 0) = 3;
+  mtr1(1, 1) = 4;
+  mtr1(1, 2) = 4;
+  mtr1(1, 3) = 4;
+  mtr1(2, 0) = 4;
+  mtr1(2, 1) = 4;
+  mtr1(2, 2) = 9;
+  mtr1(2, 3) = 9;
+  mtr1(3, 0) = 1;
+  mtr1(3, 1) = 1;
+  mtr1(3, 2) = 5;
+  mtr1(3, 3) = 1;
+  EXPECT_EQ(mtr1.Determinant(), -578);
+  S21Matrix mtr2(1, 1);
+  mtr2(0, 0) = 10;
+  EXPECT_EQ(mtr2.Determinant(), 10);
+  S21Matrix mtr3(2, 2);
+  mtr3(0, 0) = 1.1;
+  mtr3(0, 1) = 3.5;
+  mtr3(1, 0) = -2;
+  mtr3(1, 1) = 4;
+  EXPECT_DOUBLE_EQ(mtr3.Determinant(), 11.4);
 }
 
-TEST(functionalTest, PlusEx2) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(a += b);
+TEST(Methods, DeterminantDop) {
+  S21Matrix mtr(4, 4);
+  mtr(0, 0) = 1;
+  mtr(0, 1) = 2;
+  mtr(0, 2) = 3;
+  mtr(0, 3) = 4;
+  mtr(1, 0) = 1;
+  mtr(1, 1) = 2;
+  mtr(1, 2) = 5;
+  mtr(1, 3) = 7;
+  mtr(2, 0) = 1;
+  mtr(2, 1) = 0;
+  mtr(2, 2) = 6;
+  mtr(2, 3) = 8;
+  mtr(3, 0) = 1;
+  mtr(3, 1) = 0;
+  mtr(3, 2) = 6;
+  mtr(3, 3) = 6;
+  EXPECT_EQ(mtr.Determinant(), -8);
 }
 
-TEST(functionalTest, Plus3) {
-  S21Matrix a(2, 2);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  a.SumMatrix(b);
-  EXPECT_DOUBLE_EQ(a(1, 1), 3.3);
+TEST(Methods, DeterminantExcept) {
+  S21Matrix mtr(3, 2);
+  EXPECT_ANY_THROW(mtr.Determinant());
 }
 
-TEST(functionalTest, PlusEx3) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(a.SumMatrix(b));
+TEST(Methods, CalcComplements) {
+  S21Matrix mtr1(3, 3);
+  S21Matrix res(3, 3);
+  mtr1(0, 0) = 1;
+  mtr1(0, 1) = 2;
+  mtr1(0, 2) = 3;
+  mtr1(1, 0) = 0;
+  mtr1(1, 1) = 4;
+  mtr1(1, 2) = 2;
+  mtr1(2, 0) = 5;
+  mtr1(2, 1) = 2;
+  mtr1(2, 2) = 1;
+
+  res(0, 0) = 0;
+  res(0, 1) = 10;
+  res(0, 2) = -20;
+  res(1, 0) = 4;
+  res(1, 1) = -14;
+  res(1, 2) = 8;
+  res(2, 0) = -8;
+  res(2, 1) = -2;
+  res(2, 2) = 4;
+
+  S21Matrix mtr2(mtr1.CalcComplements());
+  EXPECT_TRUE(mtr2.EqMatrix(res));
+
+  mtr1.set_cols(1);
+  mtr1.set_rows(1);
+  res.set_cols(1);
+  res.set_rows(1);
+  mtr1(0, 0) = 1;
+  res(0, 0) = 1;
+  S21Matrix mtr3(mtr1.CalcComplements());
+  EXPECT_TRUE(mtr3.EqMatrix(res));
 }
 
-TEST(functionalTest, Minus) {
-  S21Matrix a(2, 2);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  S21Matrix res = a - b;
-  EXPECT_DOUBLE_EQ(res(1, 1), -1.1);
+TEST(Methods, CalcComplementsExcept) {
+  S21Matrix mtr1(5, 4);
+  EXPECT_ANY_THROW(mtr1.CalcComplements());
 }
 
-TEST(functionalTest, MinusEx) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(S21Matrix res = a + b);
+TEST(Methods, InverseMatrix) {
+  S21Matrix mtr1(3, 3);
+  S21Matrix res(3, 3);
+  mtr1(0, 0) = 2;
+  mtr1(0, 1) = 6;
+  mtr1(0, 2) = 5;
+  mtr1(1, 0) = 5;
+  mtr1(1, 1) = 3;
+  mtr1(1, 2) = -2;
+  mtr1(2, 0) = 7;
+  mtr1(2, 1) = 4;
+  mtr1(2, 2) = -3;
+
+  res(0, 0) = 1;
+  res(0, 1) = -38;
+  res(0, 2) = 27;
+  res(1, 0) = -1;
+  res(1, 1) = 41;
+  res(1, 2) = -29;
+  res(2, 0) = 1;
+  res(2, 1) = -34;
+  res(2, 2) = 24;
+
+  S21Matrix mtr2(mtr1.InverseMatrix());
+  EXPECT_TRUE(mtr2.EqMatrix(res));
 }
 
-TEST(functionalTest, Minus2) {
-  S21Matrix a(2, 2);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  a -= b;
-  EXPECT_DOUBLE_EQ(a(1, 1), -1.1);
+TEST(Methods, InverseMatrixDop) {
+  S21Matrix mtr1(3, 3);
+  mtr1(0, 0) = 4;
+  mtr1(0, 1) = -2;
+  mtr1(0, 2) = 1;
+  mtr1(1, 0) = 1;
+  mtr1(1, 1) = 6;
+  mtr1(1, 2) = -2;
+  mtr1(2, 0) = 1;
+  mtr1(2, 1) = 0;
+  mtr1(2, 2) = 0;
+  mtr1 = mtr1.InverseMatrix();
+  EXPECT_EQ(mtr1(0, 1), 0);
+  EXPECT_EQ(mtr1(0, 2), 1);
+  EXPECT_EQ(mtr1(1, 0), 1);
+  EXPECT_EQ(mtr1(2, 0), 3);
+  EXPECT_EQ(mtr1(2, 1), 1);
+  EXPECT_EQ(mtr1(2, 2), -13);
 }
 
-TEST(functionalTest, MinusEx2) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(a -= b);
+TEST(Methods, InverseMatrixExcept) {
+  S21Matrix mtr1(3, 3);
+
+  mtr1(0, 0) = 1;
+  mtr1(0, 1) = 4;
+  mtr1(0, 2) = 1;
+  mtr1(1, 0) = 3;
+  mtr1(1, 1) = 7;
+  mtr1(1, 2) = 2;
+  mtr1(2, 0) = 3;
+  mtr1(2, 1) = 2;
+  mtr1(2, 2) = 1;
+  EXPECT_EQ(mtr1.Determinant(), 0);
+  EXPECT_ANY_THROW(mtr1.InverseMatrix());
 }
 
-TEST(functionalTest, Minus3) {
-  S21Matrix a(2, 2);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  a.SubMatrix(b);
-  EXPECT_DOUBLE_EQ(a(1, 1), -1.1);
+TEST(Methods, InverseMatrixExceptDop) {
+  S21Matrix mtr1(5, 4);
+  EXPECT_ANY_THROW(mtr1.CalcComplements());
 }
 
-TEST(functionalTest, MinusEx3) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(a.SubMatrix(b));
+
+TEST(Methods, InverseMatrixExceptDop) {
+  S21Matrix mtr1(5, 4);
+  EXPECT_ANY_THROW(mtr1.CalcComplements());
 }
 
-TEST(functionalTest, MinusEx4) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(a - b);
-}
 
-TEST(functionalTest, MultMatrix) {
-  S21Matrix a(3, 2);
-  S21Matrix b(2, 3);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2;
-  S21Matrix res = a * b;
-  EXPECT_DOUBLE_EQ(res(1, 1), 2.2);
-}
 
-TEST(functionalTest, MultMatrixEx) {
-  S21Matrix a(2, 3);
-  S21Matrix b(2, 2);
-  a(1, 1) = 1.1;
-  b(1, 1) = 2.2;
-  EXPECT_ANY_THROW(S21Matrix res = a * b);
-}
+
+
 
 TEST(functionalTest, MultMatrix2) {
   S21Matrix a(3, 2);
@@ -352,181 +409,7 @@ TEST(functionalTest, equalFunc) {
   EXPECT_EQ(a.EqMatrix(b), false);
 }
 
-TEST(functionalFuncTest, transpose) {
-  S21Matrix m(2, 3);
-  m(0, 0) = 1;
-  m(0, 1) = 2;
-  m(0, 2) = 3;
-  m(1, 0) = 4;
-  m(1, 1) = 5;
-  m(1, 2) = 6;
-  // 1 2 3
-  // 4 5 6
-  EXPECT_EQ(m(1, 1), 5);
-  m = std::move(m.Transpose());
-  // 1 4
-  // 2 5
-  // 3 6
-  EXPECT_EQ(m(0, 0), 1);
-  EXPECT_EQ(m(2, 1), 6);
-}
 
-TEST(functionalFuncTest, determinant) {
-  S21Matrix m(4, 4);
-  m(0, 0) = 9;
-  m(0, 1) = 2;
-  m(0, 2) = 2;
-  m(0, 3) = 4;
-
-  m(1, 0) = 3;
-  m(1, 1) = 4;
-  m(1, 2) = 4;
-  m(1, 3) = 4;
-
-  m(2, 0) = 4;
-  m(2, 1) = 4;
-  m(2, 2) = 9;
-  m(2, 3) = 9;
-
-  m(3, 0) = 1;
-  m(3, 1) = 1;
-  m(3, 2) = 5;
-  m(3, 3) = 1;
-  EXPECT_EQ(m.Determinant(), -578);
-  S21Matrix m1(1, 1);
-  m1(0, 0) = 10;
-  EXPECT_EQ(m1.Determinant(), 10);
-  S21Matrix m2(2, 2);
-  m2(0, 0) = 1.1;
-  m2(0, 1) = 3.5;
-  m2(1, 0) = -2;
-  m2(1, 1) = 4;
-  EXPECT_DOUBLE_EQ(m2.Determinant(), 11.4);
-}
-
-TEST(functionalFuncTest, determinant2) {
-  S21Matrix m(4, 4);
-  m(0, 0) = 1;
-  m(0, 1) = 2;
-  m(0, 2) = 3;
-  m(0, 3) = 4;
-
-  m(1, 0) = 1;
-  m(1, 1) = 2;
-  m(1, 2) = 5;
-  m(1, 3) = 7;
-
-  m(2, 0) = 1;
-  m(2, 1) = 0;
-  m(2, 2) = 6;
-  m(2, 3) = 8;
-
-  m(3, 0) = 1;
-  m(3, 1) = 0;
-  m(3, 2) = 6;
-  m(3, 3) = 6;
-  EXPECT_EQ(m.Determinant(), -8);
-}
-
-TEST(functionalFuncTest, determinantEx) {
-  S21Matrix m(4, 3);
-
-  EXPECT_ANY_THROW(m.Determinant());
-}
-
-TEST(functionalFuncTest, calcComplements) {
-  S21Matrix m(3, 3);
-  m(0, 0) = 1;
-  m(0, 1) = 2;
-  m(0, 2) = 3;
-
-  m(1, 0) = 0;
-  m(1, 1) = 4;
-  m(1, 2) = 2;
-
-  m(2, 0) = 5;
-  m(2, 1) = 2;
-  m(2, 2) = 1;
-
-  m = m.CalcComplements();
-
-  EXPECT_EQ(m(0, 0), 0);
-  EXPECT_EQ(m(0, 1), 10);
-  EXPECT_EQ(m(0, 2), -20);
-  EXPECT_EQ(m(1, 0), 4);
-  EXPECT_EQ(m(1, 1), -14);
-  EXPECT_EQ(m(1, 2), 8);
-  EXPECT_EQ(m(2, 0), -8);
-  EXPECT_EQ(m(2, 1), -2);
-  EXPECT_EQ(m(2, 2), 4);
-}
-
-TEST(functionalFuncTest, calcComplementsEx) {
-  S21Matrix m(4, 3);
-
-  EXPECT_ANY_THROW(m.CalcComplements());
-}
-
-TEST(functionalFuncTest, inverseMatrix) {
-  S21Matrix m(3, 3);
-  // var 1
-  m(0, 0) = 4;
-  m(0, 1) = -2;
-  m(0, 2) = 1;
-  m(1, 0) = 1;
-  m(1, 1) = 6;
-  m(1, 2) = -2;
-  m(2, 0) = 1;
-  m(2, 1) = 0;
-  m(2, 2) = 0;
-
-  m = m.InverseMatrix();
-
-  EXPECT_EQ(m(0, 1), 0);
-  EXPECT_EQ(m(0, 2), 1);
-  EXPECT_EQ(m(1, 0), 1);
-  EXPECT_EQ(m(2, 0), 3);
-  EXPECT_EQ(m(2, 1), 1);
-  EXPECT_EQ(m(2, 2), -13);
-}
-
-TEST(functionalFuncTest, inverseMatrixEx) {
-  S21Matrix m(3, 3);
-
-  //  determ = 0
-  m(0, 0) = 1;
-  m(0, 1) = 1;
-  m(0, 2) = 3;
-  m(1, 0) = 4;
-  m(1, 1) = 4;
-  m(1, 2) = 6;
-  m(2, 0) = 4;
-  m(2, 1) = 4;
-  m(2, 2) = 9;
-  EXPECT_EQ(m.Determinant(), 0);
-  EXPECT_ANY_THROW(m.InverseMatrix());
-}
-
-TEST(functionalFuncTest, inverseMatrixEx2) {
-  S21Matrix m(3, 3);
-
-  m(0, 0) = 1;
-  m(0, 1) = 4;
-  m(0, 2) = 1;
-  m(1, 0) = 3;
-  m(1, 1) = 7;
-  m(1, 2) = 2;
-  m(2, 0) = 3;
-  m(2, 1) = 2;
-  m(2, 2) = 1;
-  EXPECT_EQ(m.Determinant(), 0);
-  EXPECT_ANY_THROW(m.InverseMatrix());
-}
-
-TEST(functionalFuncTest, inverseMatrixEx3) {
-  S21Matrix m(3, 2);
-  EXPECT_ANY_THROW(m.InverseMatrix());
-}
 
 TEST(functionalFuncTest, braketEx) {
   S21Matrix m(1, 1);
@@ -541,6 +424,51 @@ TEST(functionalFuncTest, braketEx2) {
   EXPECT_ANY_THROW(m(0, -1));
   EXPECT_ANY_THROW(m(-1, 0));
   EXPECT_ANY_THROW(m(-1, 1));
+}
+
+TEST(AccessorMutator, set_rows) {
+  S21Matrix m(2, 3);
+  m(1, 1) = 4.4;
+  EXPECT_EQ(m(1, 1), 4.4);
+  EXPECT_EQ(m.get_rows(), 2);
+  EXPECT_EQ(m.get_cols(), 3);
+  m.set_rows(4);
+  m(3, 2) = 5.5;
+  EXPECT_EQ(m(1, 1), 4.4);
+  EXPECT_EQ(m(3, 2), 5.5);
+  EXPECT_EQ(m.get_rows(), 4);
+  EXPECT_EQ(m.get_cols(), 3);
+}
+
+TEST(AccessorMutator, set_cols) {
+  S21Matrix m(2, 3);
+  m(1, 1) = 4.4;
+  EXPECT_EQ(m(1, 1), 4.4);
+  EXPECT_EQ(m.get_rows(), 2);
+  EXPECT_EQ(m.get_cols(), 3);
+  m.set_cols(5);
+  m(1, 4) = 5.5;
+  EXPECT_EQ(m(1, 1), 4.4);
+  EXPECT_EQ(m(1, 4), 5.5);
+  EXPECT_EQ(m.get_rows(), 2);
+  EXPECT_EQ(m.get_cols(), 5);
+}
+
+TEST(assignmentOperator, brakets) {
+  S21Matrix m(2, 3);
+  m(1, 1) = 3;
+  EXPECT_EQ(m(1, 1), 3);
+}
+
+TEST(assignmentOperator, braketsTrow) {
+  S21Matrix m(2, 3);
+  EXPECT_ANY_THROW(m(1, 5));
+}
+
+TEST(supportFunction, SetZeroMatrix) {
+  S21Matrix m;
+  EXPECT_EQ(m.get_rows(), 5);
+  EXPECT_EQ(m.get_cols(), 5);
 }
 
 int main(int argc, char *argv[]) {
