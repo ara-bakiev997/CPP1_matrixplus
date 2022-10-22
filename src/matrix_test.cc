@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include <utility>
+
 #include "s21_matrix_oop.h"
 
 using namespace s21;
