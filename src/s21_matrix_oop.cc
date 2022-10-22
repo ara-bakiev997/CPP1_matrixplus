@@ -84,7 +84,7 @@ void s21::S21Matrix::MulMatrix(const S21Matrix &other) {
       }
     }
   }
-  *this = std::move(tmp);
+  *this = tmp;
 }
 
 s21::S21Matrix s21::S21Matrix::Transpose() {
